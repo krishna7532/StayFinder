@@ -8,21 +8,6 @@ body {
 .container {
     flex: 1;
 }
-/* Navbar */
-.navbar {
-  height: 5rem;
-  background-color: white;
-}
-
-.fa-compass {
-  color: #fe424d;
-  font-size: 2rem;
-}
-
-.nav-link {
-  color: #222222 !important;
-}
-
 /* Footer */
 .f-info-links a {
   text-decoration: none;
@@ -113,3 +98,22 @@ body {
 .review-card .card-body {
   padding: 1rem !important;
 }
+/* 
+#map {
+  height: 400px;
+  height: 350px;
+  width: 100%;
+  border-radius: 0.75rem;
+} */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  #map {
+    height: 280px;
+  }
+}
+

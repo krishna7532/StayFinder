@@ -1,14 +1,64 @@
 <% layout("/layouts/boilerplate") %>
 <body>
-    <h3>All listings</h3>
+<div id="filters">
+  <div class="filter">
+    <i class="fa-solid fa-fire"></i>
+    <p>Trending</p>
+  </div>
+
+  <div class="filter">
+    <i class="fa-solid fa-bed"></i>
+    <p>Rooms</p>
+  </div>
+
+  <div class="filter">
+    <i class="fa-solid fa-water"></i>
+    <p>Beach</p>
+  </div>
+
+  <div class="filter">
+    <i class="fa-solid fa-mountain"></i>
+    <p>Mountains</p>
+  </div>
+
+  <div class="filter">
+    <i class="fa-solid fa-building"></i>
+    <p>City</p>
+  </div>
+
+  <div class="filter">
+    <i class="fa-solid fa-tree"></i>
+    <p>Countryside</p>
+  </div>
+
+  <div class="filter">
+    <i class="fa-solid fa-water"></i>
+    <p>Pool</p>
+  </div>
+
+  <div class="filter">
+    <i class="fa-solid fa-paw"></i>
+    <p>Pet Friendly</p>
+  </div>
+
+  <div class="filter">
+    <i class="fa-solid fa-star"></i>
+    <p>Luxury</p>
+  </div>
+
+  <div class="filter">
+    <i class="fa-solid fa-wallet"></i>
+    <p>Budget</p>
+  </div>
+</div>
     <!-- <form method="GET" action="/listings/new">
         <button>Create new Post</button>
     </form> -->
     <div class="row row-cols-lg-3 row-clos-md-2 row-cols-sm-1">
           <% for(let listing of allListings){ %>
          <a href="/listings/<%= listing._id %>" class="listing-link">
-          <div class="card col" style="width: 20rem;">
-            <img src="<%= listing.image %>" class="card-img-top" alt="listing-image" style="height: 20rem;">
+          <div class="card col listing-card">
+            <img src="<%= listing.image.url %>" class="card-img-top listing-img" alt="listing-image">
             <div class="card-img-overlay"></div>
           <div class="card-body">
           <p class="card-text"><b><%= listing.title %> </b><br>

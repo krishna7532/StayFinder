@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !="production"){
+    require("dotenv").config();
+}
+
 const express=require("express");
 const app=express();
 const mongoose=require("mongoose");
@@ -39,16 +43,17 @@ async function main(){
 }
 
 //Express session
+const sessionMaxAge=24 * 60 * 60 * 1000; // 24 hours
+
 const sessionOption={
     secret : "mysupersecret",
     resave :false,
-    saveUninitialized : true
+    saveUninitialized : true,
+    cookie:{
+        maxAge: sessionMaxAge,
+        httpOnly: true
+    }
 };
-
-app.get('/',(req,res)=>{
-    res.send('hello i am root');
-});
-
 
 app.use(session(sessionOption));
 app.use(flash());
@@ -70,6 +75,32 @@ app.use((req,res,next)=>{
     next();
 });
 
+// Map tile proxy: fetches Geoapify raster tiles server-side to keep GEOAPIFY_API_KEY 100% secure
+app.get("/api/tiles/:z/:x/:y.png", async (req, res) => {
+    try {
+        const { z, x, y } = req.params;
+        const apiKey = process.env.GEOAPIFY_API_KEY;
+
+        if (!apiKey) {
+            return res.redirect(`https://tile.openstreetmap.org/${z}/${x}/${y}.png`);
+        }
+
+        const tileUrl = `https://maps.geoapify.com/v1/tile/osm-bright/${z}/${x}/${y}.png?apiKey=${apiKey}`;
+        const response = await fetch(tileUrl);
+
+        if (!response.ok) {
+            return res.redirect(`https://tile.openstreetmap.org/${z}/${x}/${y}.png`);
+        }
+
+        res.set("Content-Type", "image/png");
+        res.set("Cache-Control", "public, max-age=86400");
+        const arrayBuffer = await response.arrayBuffer();
+        res.send(Buffer.from(arrayBuffer));
+    } catch (err) {
+        res.redirect(`https://tile.openstreetmap.org/${req.params.z}/${req.params.x}/${req.params.y}.png`);
+    }
+});
+
 //use of router path
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
@@ -87,3 +118,4 @@ app.use((err,req,res,next)=>{
 app.listen(8080,()=>{
     console.log("app is listening on port 8080");
 });
+

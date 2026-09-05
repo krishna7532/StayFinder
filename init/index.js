@@ -1,6 +1,11 @@
+// if(process.env.NODE_ENV !="production"){
+//   require("dotenv").config();
+// }
+
 const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
+//const { getCoordinates } = require("../utils/geoapify.js");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/stayFinder";
 
@@ -20,6 +25,13 @@ const initDB = async () => {
   await Listing.deleteMany({});
 
   const ownerId = new mongoose.Types.ObjectId("6a92f82d30ab21081120b3b3");
+  // const listingsWithOwner = await Promise.all(
+  //   initData.data.map(async (obj) => ({
+  //     ...obj,
+  //     owner: ownerId,
+  //     geometry: await getCoordinates(obj),
+  //   }))
+  // );
   const listingsWithOwner = initData.data.map((obj) => ({
     ...obj,
     owner: ownerId,

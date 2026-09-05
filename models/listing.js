@@ -8,14 +8,13 @@ const listingSchema=new Schema({
     },
     description : String,
     image:{
-        type:String,
-        set:(v)=>v===""?"https://images.pexels.com/photos/28437165/pexels-photo-28437165.jpeg"
-        :v,
-         default:"https://images.pexels.com/photos/28437165/pexels-photo-28437165.jpeg",
+        url :String,
+        filename:String,
     },
     price:Number,
     location:String,
     country:String,
+    pin :String,
     reviews : [{
         type : Schema.Types.ObjectId,
         ref :"Review"
@@ -24,6 +23,19 @@ const listingSchema=new Schema({
         type :Schema.Types.ObjectId,
         ref :"User"
     },
+    geometry :{
+        type :{
+            type: String,
+            enum: ["Point"],
+            default: "Point"
+        },
+        coordinates: {
+            type: [Number],
+            default: [0, 0]
+        }
+        },
+        formattedAddress: String
+    }
 
 });
 listingSchema.post("findOneAndDelete",async (listing)=>{

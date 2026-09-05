@@ -5,7 +5,7 @@
   </div>
     <div class="card col-6 offset-3 show-card">
         <img
-            src="<%= listing.image %>"
+            src="<%= listing.image.url %>"
             class="card-img-top show-img"
             alt="listing-image"
         />
@@ -31,6 +31,31 @@
         </form>
     </div>
     <% } %>
+
+    <div class="col-8 offset-3 mb-3">
+        <hr />
+        <h3>Where you'll be</h3>
+        <p class="card-text mb-2">
+            <i class="fa-solid fa-location-dot me-2 text-danger"></i><%= listing.location %><%= listing.country ? ', ' + listing.country : '' %>
+        </p>
+        <% if (listing.geometry && listing.geometry.coordinates && listing.geometry.coordinates.length === 2 && !(listing.geometry.coordinates[0] === 0 && listing.geometry.coordinates[1] === 0)) { %>
+            <div id="map"
+                 data-lat="<%= listing.geometry.coordinates[1] %>"
+                 data-lng="<%= listing.geometry.coordinates[0] %>"
+                 data-title="<%= listing.title %>"
+                 data-location="<%= listing.location %><%= listing.country ? ', ' + listing.country : '' %>">
+            </div>
+        <% } else if (!listing.location) { %>
+            <div class="alert alert-light border">
+                <p class="text-muted mb-0"><i class="fa-solid fa-circle-info me-2"></i>Location not available</p>
+            </div>
+        <% } else { %>
+            <div class="alert alert-light border">
+                <p class="text-muted mb-0"><i class="fa-solid fa-circle-exclamation me-2"></i>Map location could not be found.</p>
+            </div>
+        <% } %>
+    </div>
+
     <div class="col-8 offset-3 mb-3">
         <% if(currUser) { %>
         <h4>Leave a review</h4>
@@ -87,3 +112,4 @@
 </div>
 </div>
 </div>
+
