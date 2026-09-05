@@ -75,32 +75,6 @@ app.use((req,res,next)=>{
     next();
 });
 
-// Map tile proxy: fetches Geoapify raster tiles server-side to keep GEOAPIFY_API_KEY 100% secure
-app.get("/api/tiles/:z/:x/:y.png", async (req, res) => {
-    try {
-        const { z, x, y } = req.params;
-        const apiKey = process.env.GEOAPIFY_API_KEY;
-
-        if (!apiKey) {
-            return res.redirect(`https://tile.openstreetmap.org/${z}/${x}/${y}.png`);
-        }
-
-        const tileUrl = `https://maps.geoapify.com/v1/tile/osm-bright/${z}/${x}/${y}.png?apiKey=${apiKey}`;
-        const response = await fetch(tileUrl);
-
-        if (!response.ok) {
-            return res.redirect(`https://tile.openstreetmap.org/${z}/${x}/${y}.png`);
-        }
-
-        res.set("Content-Type", "image/png");
-        res.set("Cache-Control", "public, max-age=86400");
-        const arrayBuffer = await response.arrayBuffer();
-        res.send(Buffer.from(arrayBuffer));
-    } catch (err) {
-        res.redirect(`https://tile.openstreetmap.org/${req.params.z}/${req.params.x}/${req.params.y}.png`);
-    }
-});
-
 //use of router path
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);

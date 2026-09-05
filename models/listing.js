@@ -33,8 +33,6 @@ const listingSchema=new Schema({
             type: [Number],
             default: [0, 0]
         }
-        },
-        formattedAddress: String
     }
 
 });
