@@ -10,13 +10,18 @@
       </div>
       
 <div class="navbar-nav ms-auto">
-  <form class="d-flex" role="search">
+  <form class="d-flex" role="search" action="/listings" method="GET">
     <input
       class="form-control me-2 search-inp"
       type="search"
+      name="location"
+      value="<%= typeof query !== 'undefined' && query && query.location ? query.location : '' %>"
       placeholder="Search destination"
       aria-label="Search"
     />
+    <% if(typeof activeFilter !== 'undefined' && activeFilter) { %>
+      <input type="hidden" name="filter" value="<%= activeFilter %>" />
+    <% } %>
     <button class="btn search-btn" type="submit">
      <i class="fa-solid fa-magnifying-glass"></i>
       Search</button>

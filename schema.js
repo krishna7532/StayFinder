@@ -6,9 +6,11 @@ module.exports.listingSchema = Joi.object({
     description: Joi.string().required(),
     location: Joi.string().required(),
     country: Joi.string().required(),
-    pin: Joi.string().required(),
     price: Joi.number().required().min(0),
-    image: Joi.string().allow("", null)
+    image: Joi.string().allow("", null),
+    category: Joi.string().valid("Beach", "Mountains", "City", "Countryside", "Luxury", "Other").allow("", null),
+    propertyType: Joi.string().valid("Room", "Apartment", "House", "Villa", "Hotel", "Other").allow("", null),
+    amenities: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()).allow("", null)
 });
 
 module.exports.reviewSchema=Joi.object({

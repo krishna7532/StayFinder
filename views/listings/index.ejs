@@ -1,72 +1,95 @@
 <% layout("/layouts/boilerplate") %>
 <body>
+<% 
+  const locParam = (typeof query !== 'undefined' && query && query.location) ? `&location=${encodeURIComponent(query.location)}` : '';
+  const isFilterActive = typeof activeFilter !== 'undefined' && activeFilter;
+  const isSearchActive = typeof query !== 'undefined' && query && query.location;
+%>
+
 <div id="filters">
-  <div class="filter">
-    <i class="fa-solid fa-fire"></i>
+  <a href="/listings?filter=trending<%= locParam %>" class="filter <%= (isFilterActive && activeFilter === 'trending') ? 'active-filter' : '' %>">
+    <div><i class="fa-solid fa-fire"></i></div>
     <p>Trending</p>
-  </div>
+  </a>
 
-  <div class="filter">
-    <i class="fa-solid fa-bed"></i>
+  <a href="/listings?filter=rooms<%= locParam %>" class="filter <%= (isFilterActive && activeFilter === 'rooms') ? 'active-filter' : '' %>">
+    <div><i class="fa-solid fa-bed"></i></div>
     <p>Rooms</p>
-  </div>
+  </a>
 
-  <div class="filter">
-    <i class="fa-solid fa-water"></i>
+  <a href="/listings?filter=beach<%= locParam %>" class="filter <%= (isFilterActive && activeFilter === 'beach') ? 'active-filter' : '' %>">
+    <div><i class="fa-solid fa-water"></i></div>
     <p>Beach</p>
-  </div>
+  </a>
 
-  <div class="filter">
-    <i class="fa-solid fa-mountain"></i>
+  <a href="/listings?filter=mountains<%= locParam %>" class="filter <%= (isFilterActive && activeFilter === 'mountains') ? 'active-filter' : '' %>">
+    <div><i class="fa-solid fa-mountain"></i></div>
     <p>Mountains</p>
-  </div>
+  </a>
 
-  <div class="filter">
-    <i class="fa-solid fa-building"></i>
+  <a href="/listings?filter=city<%= locParam %>" class="filter <%= (isFilterActive && activeFilter === 'city') ? 'active-filter' : '' %>">
+    <div><i class="fa-solid fa-building"></i></div>
     <p>City</p>
-  </div>
+  </a>
 
-  <div class="filter">
-    <i class="fa-solid fa-tree"></i>
+  <a href="/listings?filter=countryside<%= locParam %>" class="filter <%= (isFilterActive && activeFilter === 'countryside') ? 'active-filter' : '' %>">
+    <div><i class="fa-solid fa-tree"></i></div>
     <p>Countryside</p>
-  </div>
+  </a>
 
-  <div class="filter">
-    <i class="fa-solid fa-water"></i>
+  <a href="/listings?filter=pool<%= locParam %>" class="filter <%= (isFilterActive && activeFilter === 'pool') ? 'active-filter' : '' %>">
+    <div><i class="fa-solid fa-water"></i></div>
     <p>Pool</p>
-  </div>
+  </a>
 
-  <div class="filter">
-    <i class="fa-solid fa-paw"></i>
+  <a href="/listings?filter=pet-friendly<%= locParam %>" class="filter <%= (isFilterActive && activeFilter === 'pet-friendly') ? 'active-filter' : '' %>">
+    <div><i class="fa-solid fa-paw"></i></div>
     <p>Pet Friendly</p>
-  </div>
+  </a>
 
-  <div class="filter">
-    <i class="fa-solid fa-star"></i>
+  <a href="/listings?filter=luxury<%= locParam %>" class="filter <%= (isFilterActive && activeFilter === 'luxury') ? 'active-filter' : '' %>">
+    <div><i class="fa-solid fa-star"></i></div>
     <p>Luxury</p>
-  </div>
+  </a>
 
-  <div class="filter">
-    <i class="fa-solid fa-wallet"></i>
+  <a href="/listings?filter=budget<%= locParam %>" class="filter <%= (isFilterActive && activeFilter === 'budget') ? 'active-filter' : '' %>">
+    <div><i class="fa-solid fa-wallet"></i></div>
     <p>Budget</p>
-  </div>
+  </a>
+
+  <% if (isFilterActive || isSearchActive) { %>
+    <div class="filter-reset d-flex align-items-center">
+      <a href="/listings" class="btn btn-outline-secondary btn-sm rounded-pill ms-2">
+        <i class="fa-solid fa-xmark me-1"></i> Clear Filters
+      </a>
+    </div>
+  <% } %>
 </div>
-    <!-- <form method="GET" action="/listings/new">
-        <button>Create new Post</button>
-    </form> -->
-    <div class="row row-cols-lg-3 row-clos-md-2 row-cols-sm-1">
-          <% for(let listing of allListings){ %>
-         <a href="/listings/<%= listing._id %>" class="listing-link">
+
+  <% if (allListings.length === 0) { %>
+    <div class="row mt-5">
+      <div class="col-8 offset-2 text-center py-5">
+        <i class="fa-solid fa-compass fa-3x text-muted mb-3"></i>
+        <h4>No listings found</h4>
+        <p class="text-muted">We couldn't find any stays matching your filters. Try clearing filters or exploring other destinations.</p>
+        <a href="/listings" class="btn btn-dark mt-2">View All Listings</a>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+      <% for(let listing of allListings){ %>
+        <a href="/listings/<%= listing._id %>" class="listing-link">
           <div class="card col listing-card">
             <img src="<%= listing.image.url %>" class="card-img-top listing-img" alt="listing-image">
             <div class="card-img-overlay"></div>
-          <div class="card-body">
-          <p class="card-text"><b><%= listing.title %> </b><br>
-          &#8377; <%= listing.price == null ? "Price unavailable" : listing.price.toLocaleString("en-IN") %>/night
-        </p>
-  </div>
-</div>
-</a>
- <% } %>
-  </div>
+            <div class="card-body">
+              <p class="card-text"><b><%= listing.title %> </b><br>
+                &#8377; <%= listing.price == null ? "Price unavailable" : listing.price.toLocaleString("en-IN") %>/night
+              </p>
+            </div>
+          </div>
+        </a>
+      <% } %>
+    </div>
+  <% } %>
 </body>

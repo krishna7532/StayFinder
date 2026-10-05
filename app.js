@@ -23,6 +23,8 @@ const userRouter=require("./routes/user.js");
 
 const MONGO_URL="mongodb://127.0.0.1:27017/stayFinder";
 
+//const dburl=process.env.ATLASDB_URL;
+
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
@@ -33,6 +35,9 @@ app.use(express.static(path.join(__dirname,"public")));
 main()
 .then((res)=>{
     console.log('database connect sucessful');
+    app.listen(8080,()=>{
+    console.log("app is listening on port 8080");
+});
 })
 .catch((err)=>{
     console.log(err);
@@ -42,11 +47,11 @@ async function main(){
     await mongoose.connect(MONGO_URL);
 }
 
-//Express session
+// Express session
 const sessionMaxAge=24 * 60 * 60 * 1000; // 24 hours
 
 const sessionOption={
-    secret : "mysupersecret",
+    secret : process.env.SECRETE,
     resave :false,
     saveUninitialized : true,
     cookie:{
@@ -75,6 +80,10 @@ app.use((req,res,next)=>{
     next();
 });
 
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
+
 //use of router path
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
@@ -89,7 +98,3 @@ app.use((err,req,res,next)=>{
     req.flash("error",message);
     res.redirect("/listings");
 });
-app.listen(8080,()=>{
-    console.log("app is listening on port 8080");
-});
-

@@ -68,9 +68,9 @@
     </form>
     <hr>
 
-<h4>All Reviews</h4>
-
+<% if(listing.reviews.length>0) { %>
 <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+    <h4>All Reviews</h4>
     <% listing.reviews.forEach(review => { %>
     <div class="col">
         <div class="card h-100 shadow-sm review-card">
@@ -86,6 +86,28 @@
     </div>
     <% }); %>
 </div>
+<% } %>
 </div>
-</div>
+<div class="col-8 offset-3 mb-3">
+ <h3>Location in Map</h3>
+ <div id="map" style="width: 100%; height: 500px"></div>
+<script>
+  const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
+  const map = new maplibregl.Map({
+    style: 'https://tiles.openfreemap.org/styles/liberty',
+    center: coordinates,
+    zoom: 9.5,
+    container: 'map',
+  });
 
+new maplibregl.Marker({ color :"red" })
+  .setLngLat(coordinates)
+  .setPopup(
+new maplibregl.Popup({ offset: 25 }).setHTML(
+`<h4>Exact Location provided after booking</h4>`
+)
+)
+  .addTo(map);
+</script>
+</div>
+</div>
